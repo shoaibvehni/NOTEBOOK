@@ -48,63 +48,52 @@ router.post('/addnotes',fetchuser ,[
         
 }
 } )
-
-router.put('/updatenotes/:id',fetchuser ,
-  async (req, res)=>{
+router.put('/updatenotes/:id', fetchuser, async (req, res) => {
     try {
-        
-    const {title, description,tag}= req.body;
-let newNote ={};
-if(title){newNote.title=title};
-if(description){newNote.description=description};
-if(tag){newNote.tag=tag};
+        const { title, description, tag } = req.body;
+        let newNote = {};
+        if (title) { newNote.title = title; }
+        if (description) { newNote.description = description; }
+        if (tag) { newNote.tag = tag; }
 
-let note =  await Note.findById(req.params.id);
-if(!note){
-    res.status(404).send("not found")
-}
+        let note = await Note.findById(req.params.id);
+        if (!note) {
+            return res.status(404).send("Not found");
+        }
 
-if(note.user.toString() !== req.user.id){
-    return res.status(404).send("go to hell")
-}
+        if (note.user.toString() !== req.user.id) {
+            return res.status(403).send("Unauthorized");
+        }
 
-note = await Note.findByIdAndUpdate(req.params.id, {$set:newNote}, {new:true})
-res.json({note});
-} catch (error) {
-    
-    console.error(error.message);
-    res.status(500).send('Server Error note update');
-        
-}
-})
+        note = await Note.findByIdAndUpdate(req.params.id, { $set: newNote }, { new: true });
+        res.json({ note });
+    } catch (error) {
+        console.error(error.message);
+        res.status(500).send('Server Error note update');
+        // Make sure to return the response after sending an error
+        return;
+    }
+});
 
-
-router.delete('/deletenotes/:id',fetchuser ,
-  async (req, res)=>{
+router.delete('/deletenotes/:id', fetchuser, async (req, res) => {
     try {
-        
-    const {title, description,tag}= req.body;
+        const note = await Note.findById(req.params.id);
+        if (!note) {
+            return res.status(404).send("Not found");
+        }
 
-let note =  await Note.findById(req.params.id);
-if(!note){
-    res.status(404).send("not found")
-}
+        if (note.user.toString() !== req.user.id) {
+            return res.status(403).send("Unauthorized");
+        }
 
-if(note.user.toString() !== req.user.id){
-    return res.status(404).send("go to hell")
-}
-
-note = await Note.findByIdAndDelete(req.params.id)
-
-res.json({"Success":"note delted hogya  " ,note:note    });
-
-} catch (error) {
-    
-    console.error(error.message);
-    res.status(500).send('Server Error note update');
-        
-}
-})
-
+        await Note.findByIdAndDelete(req.params.id);
+        res.json({ success: true, message: "Note deleted successfully" });
+    } catch (error) {
+        console.error(error.message);
+        res.status(500).send('Server Error note delete');
+        // Make sure to return the response after sending an error
+        return;
+    }
+});
 
 module.exports = router

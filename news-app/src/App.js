@@ -1,6 +1,8 @@
 import logo from './logo.svg';
 import './App.css';
 import NoteState from './context/notes/noteState';
+import Login from './componet/Login';
+import Signup from './componet/Signup';
 
 import Home from './componet/Home';
 import About from './componet/About';
@@ -24,8 +26,11 @@ function App() {
 
 <Routes>
 
+    
     <Route path="/" element={<Home/>} />
     <Route path="/About" element={<About/>} />
+    <Route path="/Login" element={ <Login/>} />
+    <Route path="/Signup" element={<Signup/>} />
     
         </Routes>
         </div>
