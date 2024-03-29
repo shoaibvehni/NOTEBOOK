@@ -6,11 +6,11 @@ const Notes = () => {
   const context = useContext(Notecontext);
   const { notes, getNotes } = context;
 
-  useEffect(() => {
-    getNotes();
-    console.log("two time");
+    useEffect(() => {
+      getNotes();
+      console.log("two time");
 
-  }, []);
+    }, []);
 
   //   <h1>Add a Note</h1>
   return (

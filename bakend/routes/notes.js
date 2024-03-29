@@ -13,7 +13,7 @@ router.get('/fetchallnotes',fetchuser , async (req, res)=>{
     
 } catch (error) {
     
-    console.error(err.message);
+    console.error(error.message);
     res.status(500).send('Server Error find');
   
 }
@@ -41,9 +41,9 @@ router.post('/addnotes',fetchuser ,[
   
     res.json(savedNote)
     
-} catch (error) {
+} catch (error) {   
     
-    console.error(err.message);
+    console.error(error.message);
     res.status(500).send('Server Error note');
         
 }
@@ -72,7 +72,7 @@ note = await Note.findByIdAndUpdate(req.params.id, {$set:newNote}, {new:true})
 res.json({note});
 } catch (error) {
     
-    console.error(err.message);
+    console.error(error.message);
     res.status(500).send('Server Error note update');
         
 }
@@ -100,7 +100,7 @@ res.json({"Success":"note delted hogya  " ,note:note    });
 
 } catch (error) {
     
-    console.error(err.message);
+    console.error(error.message);
     res.status(500).send('Server Error note update');
         
 }
