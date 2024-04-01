@@ -14,16 +14,19 @@ router.post('/createuser', [
   body('email', 'Enter a valid email').isEmail(),
   body('password', 'Enter a valid password').isLength({ min: 3 })
 ], async (req, res) => {
+  let success= false
   const errors = validationResult(req);
   if (!errors.isEmpty()) {
-    return res.status(400).json({ errors: errors.array() });
+    
+    return res.status(400).json({ success, errors: errors.array() });
   }
 
   try {
     // Check if email already exists
     let user = await User.findOne({ email: req.body.email });
     if (user) {
-      return res.status(400).json({ error: "User with this email already exists" });
+      success = false;
+      return res.status(400).json({ success, error: "User with this email already exists" });
     }
 
     const salt = await bcrypt.genSalt(10);
@@ -43,7 +46,8 @@ router.post('/createuser', [
     };
     const authtoken = jwt.sign(data, JWT_SECRET);
     console.log(authtoken);
-    res.json({ message: "User created successfully", authtoken });
+    success = true;
+    res.json({ success, message: "User created successfully", authtoken });
   } catch (err) {
     console.error(err.message);
     res.status(500).send('Server Error');
@@ -55,6 +59,7 @@ router.post('/login', [
   body('email', 'Enter a valid email').isEmail(),
   body('password', 'Enter cannot be blank').exists()
 ], async (req, res) => {
+let  success = false;
   const errors = validationResult(req);
   if (!errors.isEmpty()) {
     return res.status(400).json({ errors: errors.array() });
@@ -64,12 +69,15 @@ router.post('/login', [
   try {
     let user = await User.findOne({ email });
     if (!user) {
-      return res.status(400).json({ error: "Invalid email credentials" });
+      success = false;
+      return res.status(400).json({  success, error: "Invalid email credentials" });
     }
 
     const passwordCompare = await bcrypt.compare(password, user.password);
     if (!passwordCompare) {
-      return res.status(400).json({ error: "Invalid paswrod credentials" });
+      success = false;
+      return res.status(400).json({   success , error: "Invalid paswrod credentials" });
+  
     }
 
     const data = {
@@ -78,7 +86,8 @@ router.post('/login', [
       }
     };
     const authtoken = jwt.sign(data, JWT_SECRET);
-    res.json({ message: "User login successfully", authtoken });
+    success = true;
+    res.json({ success, message: "User login successfully", authtoken });
 
   } catch (error) { // Corrected error variable name
     console.error(error.message); // Corrected error variable name

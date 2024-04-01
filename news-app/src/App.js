@@ -14,19 +14,22 @@ import {
   Link
 } from "react-router-dom";
 import Alert from './componet/Alert';
+// import Notes from './componet/Notes';
+// import Inote from './componet/Inote';
 
 function App() {
   return (
 <>
 <NoteState><Router>
 <Navbar/>
-<Alert message={"you want to delete "}/>
-<div className="container">
+<Alert message={"WELCOME TO INOTEBOOK"}/>
+<div className="item mx-3">
 
 
 <Routes>
 
-    
+{/* <Route path="/" element={<Inote/>} />  */}
+{/* <Notes/> */}
     <Route path="/" element={<Home/>} />
     <Route path="/About" element={<About/>} />
     <Route path="/Login" element={ <Login/>} />

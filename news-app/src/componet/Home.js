@@ -14,7 +14,7 @@ export default function
   return (
     <div>
 
-{/* <Notes/> */}
+<Notes/>
         {/* <Login/>
         <Signup/> */}
     </div>

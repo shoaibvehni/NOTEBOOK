@@ -2,14 +2,18 @@ import React, { useContext, useEffect, useRef , useState } from "react";
 import Notecontext from "../context/notes/notecontext";
 import Noteitem from "./Noteitem";
 import AddNote from "./AddNote";
+import { useNavigate } from 'react-router-dom';
 const Notes = () => {
-
+  
 
   const context = useContext(Notecontext);
+  let navigate = useNavigate();
   const { notes, getNotes , updateNote } = context;
-
+  
     useEffect(() => {
-      getNotes();
+      {localStorage.getItem('token')?getNotes():navigate("/Login")}
+    
+    
 //eslint-disable-next-line
  }, []);
  const [Note, setNote] = useState({id:"", etitle:"", edescription :"",etag:""})
@@ -38,8 +42,10 @@ setNote({...Note,[e.target.name]: e.target.value})
 
 //   <h1>Add a Note</h1>
   return (
-    <div>
-      <AddNote />
+
+<div className="d-flex justify-content-center"> 
+  
+      <div className="sidebar w-50">
       <button ref={ref} type="button" className="btn btn-primary d-none" data-bs-toggle="modal" data-bs-target="#exampleModal">
   Launch demo modal
 </button> 
@@ -78,12 +84,15 @@ setNote({...Note,[e.target.name]: e.target.value})
 </div>
 
       <div className="row my-3">
-        <h1>Your Notes</h1>
+        <h1 className='mx-5'>Your Notes</h1>
             {notes.length===0&&'no notes'}
         {notes.map((note) => {
-          return <Noteitem key={note._id} updatNote={updatNote} note={note} />;
+          return  <Noteitem key={note._id} updatNote={updatNote} note={note} />;
         })}
       </div>
+      </div>
+      <div className="w-50">
+ <AddNote /></div>
     </div>
   );
 };
